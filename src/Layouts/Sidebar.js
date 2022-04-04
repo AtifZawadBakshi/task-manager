@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 const Sidebar = () => {
   return (
     <>
@@ -53,16 +53,8 @@ const Sidebar = () => {
       <div className="left-side-bar">
         <div className="brand-logo">
           <Link to="/dashboard">
-            <img
-              src="vendors/images/true-aviation-logo.jpg"
-              alt
-              className="dark-logo"
-            />
-            <img
-              src="vendors/images/true-aviation-logo.jpg"
-              alt
-              className="light-logo"
-            />
+            <img src="vendors/images/icon.png" alt className="dark-logo" />
+            <img src="vendors/images/icon.png" alt className="light-logo" />
           </Link>
           <div className="close-sidebar" data-toggle="left-sidebar-close">
             <i className="ion-close-round" />
@@ -72,23 +64,26 @@ const Sidebar = () => {
           <div className="sidebar-menu">
             <ul id="accordion-menu">
               <li>
-                <Link to="/dashboard" className="dropdown-toggle no-arrow">
+                <NavLink to="/dashboard" className="dropdown-toggle no-arrow">
                   <span className="micon dw dw-house-1" />
                   <span className="mtext">Dashboard</span>
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/create-task" className="dropdown-toggle no-arrow">
-                  <span className="micon dw dw-edit2"></span>
+                <NavLink to="/create-task" className="dropdown-toggle no-arrow">
+                  <span className="micon dw dw-edit"></span>
 
                   <span className="mtext">Create Task</span>
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/create-subtask" className="dropdown-toggle no-arrow">
-                  <span className="micon dw dw-calendar1" />
-                  <span className="mtext">Create Subtask</span>
-                </Link>
+                <NavLink
+                  to="/create-subtask"
+                  className="dropdown-toggle no-arrow"
+                >
+                  <span className="micon dw dw-add" />
+                  <span className="mtext">Add Subtask</span>
+                </NavLink>
               </li>
             </ul>
           </div>

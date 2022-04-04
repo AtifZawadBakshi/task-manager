@@ -1,34 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker-cssmodules.css";
-import "./date-picker.component.bootstrap.css";
-
-function Calendar(props) {
-  const buildClassNames = (touched, isInvalid) => {
-    touched && isInvalid ? "form-control is-invalid" : "form-control";
-  };
-
-  const { setFieldValue, setFieldTouched, errors, touched } = props;
-  const { name, value, label, ...rest } = props;
-
+import "react-datepicker/dist/react-datepicker.css";
+const Calendar = () => {
+  const [schedule, setSchedule] = useState(new Date());
   return (
-    <div className="form-group">
-      <label className="datePickerLabel" htmlFor={name}>
-        {label}
-      </label>
-      <DatePicker
-        selected={value}
-        onChange={(e) => {
-          setFieldValue(name, e);
-          setFieldTouched(name);
-        }}
-        className={buildClassNames(touched, !!errors)}
-        customInput={<input type="text" id={name} placeholder={label} />}
-        {...rest}
-      />
-
-      <div className="invalid-feedback">{errors}</div>
+    <div className="form-group row mt-3">
+      <div className="display-inline-block col-8 col-md-4 col-lg-4">
+        <div className="form-control" style={{ display: "flex" }}>
+          <i className="fa fa-calendar mt-2 mr-2 "></i>
+          <DatePicker
+            selected={schedule}
+            onChange={(date) => setSchedule(date)}
+            dateFormat="MMMM d, yyyy"
+            className="form-control "
+          />
+          <button
+            type="submit"
+            className="btn btn-primary waves-effect waves-light me-6"
+            // onClick={(e) => handleSubmit(e)}
+            style={{ padding: "0px 8px", margin: "1px 2px" }}
+          >
+            <i className="fa fa-search" />
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
 export default Calendar;
