@@ -11,7 +11,7 @@ const Calendar = () => {
           <DatePicker
             selected={schedule}
             onChange={(date) => setSchedule(date)}
-            dateFormat="MMMM d, yyyy"
+            dateFormat="YYYY-MM-DD"
             className="form-control "
           />
           <button

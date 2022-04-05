@@ -55,7 +55,6 @@ export function deleteMessage(message) {
   });
 }
 
-
 export function addMessage(message) {
   Swal.fire({
     title: "Are you sure?",
@@ -71,7 +70,6 @@ export function addMessage(message) {
     }
   });
 }
-
 
 export function errorMessage(message) {
   Swal.fire({

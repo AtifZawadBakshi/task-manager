@@ -50,7 +50,7 @@ class Login extends Component {
           <div className="container-fluid d-flex justify-content-between align-items-center">
             <div className="brand-logo">
               <Link to="/">
-                <img src="vendors/images/true-aviation-logo.jpg" alt />
+                <img src="vendors/images/icon-light.png" alt />
               </Link>
             </div>
             <div className="login-menu">

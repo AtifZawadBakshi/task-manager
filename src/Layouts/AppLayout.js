@@ -5,6 +5,7 @@ import Login from "../Components/Auth/Login";
 import Logout from "../Components/Auth/Logout";
 import CreateTask from "../Components/CreateTask/CreateTask";
 import CreateSubtask from "../Components/CreateSubtask/CreateSubtask";
+import TaskList from "../Components/TaskList/TaskList";
 import Profile from "../Components/Profile/Profile";
 import Settings from "../Components/Settings/Settings";
 
@@ -44,6 +45,7 @@ const AppLayout = () => (
         path="/create-subtask"
         component={(props) => <CreateSubtask {...props} />}
       />
+      <Route path="/task-list" component={(props) => <TaskList {...props} />} />
       <Route path="/profile" component={(props) => <Profile {...props} />} />
       <Route path="/settings" component={(props) => <Settings {...props} />} />
       <Route path="/login" component={(props) => <Login {...props} />} />

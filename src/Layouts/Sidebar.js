@@ -53,7 +53,11 @@ const Sidebar = () => {
       <div className="left-side-bar">
         <div className="brand-logo">
           <Link to="/dashboard">
-            <img src="vendors/images/icon.png" alt className="dark-logo" />
+            <img
+              src="vendors/images/icon-light.png"
+              alt
+              className="dark-logo"
+            />
             <img src="vendors/images/icon.png" alt className="light-logo" />
           </Link>
           <div className="close-sidebar" data-toggle="left-sidebar-close">
@@ -83,6 +87,12 @@ const Sidebar = () => {
                 >
                   <span className="micon dw dw-add" />
                   <span className="mtext">Add Subtask</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/task-list" className="dropdown-toggle no-arrow">
+                  <span className="micon dw dw-list" />
+                  <span className="mtext">Task List</span>
                 </NavLink>
               </li>
             </ul>

@@ -1,33 +1,42 @@
-import React from "react";
+import axios from "axios";
+import moment from "moment";
+import React, { useState, useEffect } from "react";
+import * as Helper from "../../Layouts/Helper";
+import { URL, GET_TASK } from "../../Axios/Api";
+import { Link } from "react-router-dom";
+import Loader from "../../Layouts/Loader";
 
 const CreateSubtask = () => {
+  let [formData, setFormData] = useState({});
   return (
     <>
       <div className="pd-20 card-box mb-30">
         <div className="clearfix">
           <div className="pull-left">
             <h4 className="text-blue h4">Assign Subtask Under Task</h4>
-            {/* <p className="mb-30">All bootstrap element classies</p> */}
           </div>
-          {/* <div className="pull-right">
-          <a
-            href="#horizontal-basic-form1"
-            className="btn btn-primary btn-sm scroll-click"
-            rel="content-y"
-            data-toggle="collapse"
-            role="button"
-          >
-            <i className="fa fa-code" /> Source Code
-          </a>
-        </div> */}
         </div>
 
         <form>
           <div className="form-group">
             <label>Main Task</label>
             <select
+              className="mdb-select md-form form-control"
+              searchable="Search here.."
+            >
+              <option value disabled selected>
+                Choose your country
+              </option>
+              <option value={1}>USA</option>
+              <option value={2}>Germany</option>
+              <option value={3}>France</option>
+              <option value={3}>Poland</option>
+              <option value={3}>Japan</option>
+            </select>
+
+            <select
               className="custom-select2 form-control"
-              name="state"
+              searchable="Search here.."
               style={{ width: "100%", height: "38" }}
             >
               <option value="">Select Main Task</option>
