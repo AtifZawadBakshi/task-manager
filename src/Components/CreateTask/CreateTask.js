@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { URL, STORE_TASK } from "../../Axios/Api";
 import * as Helper from "../../Layouts/Helper";
-
+import moment from "moment";
 import axios from "axios";
 
 import DatePicker from "react-datepicker";
@@ -27,9 +27,10 @@ const CreateTask = (props) => {
   function handleSubmit(e) {
     e.preventDefault();
     axios
+
       .post(URL + STORE_TASK, {
         title: title,
-        time: time,
+        time: moment(time).format("yyyy-MM-DD"),
         status: "Not Touched",
       })
       .then((res) => {

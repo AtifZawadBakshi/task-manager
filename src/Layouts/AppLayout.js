@@ -8,6 +8,7 @@ import CreateSubtask from "../Components/CreateSubtask/CreateSubtask";
 import TaskList from "../Components/TaskList/TaskList";
 import Profile from "../Components/Profile/Profile";
 import Settings from "../Components/Settings/Settings";
+import UpdateTask from "../Components/UpdateTask/UpdateTask";
 
 var user = JSON.parse(localStorage.getItem("user"));
 let isLoggedIn = false;
@@ -46,6 +47,10 @@ const AppLayout = () => (
         component={(props) => <CreateSubtask {...props} />}
       />
       <Route path="/task-list" component={(props) => <TaskList {...props} />} />
+      <Route
+        path="/update-task/:id"
+        component={(props) => <UpdateTask {...props} />}
+      />
       <Route path="/profile" component={(props) => <Profile {...props} />} />
       <Route path="/settings" component={(props) => <Settings {...props} />} />
       <Route path="/login" component={(props) => <Login {...props} />} />

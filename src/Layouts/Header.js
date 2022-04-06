@@ -7,7 +7,7 @@ const Header = () => {
         <div className="menu-icon dw dw-menu" />
       </div>
       <div className="header-right">
-        {/* <div className="dashboard-setting user-notification">
+        <div className="dashboard-setting user-notification">
           <div className="dropdown">
             <a
               className="dropdown-toggle no-arrow"
@@ -17,7 +17,7 @@ const Header = () => {
               <i className="dw dw-settings2" />
             </a>
           </div>
-        </div> */}
+        </div>
 
         <div className="user-info-dropdown">
           <div className="dropdown">

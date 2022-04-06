@@ -2,7 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import * as Helper from "../../Layouts/Helper";
-import { URL, GET_TASK } from "../../Axios/Api";
+import { URL, GET_TASK, DELETE_BOOKING } from "../../Axios/Api";
 import { Link } from "react-router-dom";
 import Loader from "../../Layouts/Loader";
 
@@ -33,12 +33,36 @@ const TaskList = () => {
         Helper.alertMessage("error", error);
       });
   }, []);
+
+  function TaskLists() {
+    axios
+      .get(URL + GET_TASK)
+      .then((response) => {
+        console.log(response.data);
+        setFormData(response.data);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        Helper.alertMessage("error", error);
+      });
+  }
   function handleEdit(id) {
     axios
       .get(URL + GET_TASK + "/" + id)
       .then((response) => {
         console.log(response.data.task);
         setModalData(response.data.task);
+      })
+      .catch((error) => {
+        Helper.alertMessage("error", error);
+      });
+  }
+  function deleteItem(id) {
+    axios
+      .delete(URL + DELETE_BOOKING + "/" + id)
+      .then((response) => {
+        TaskLists();
+        Helper.alertMessage("success", "Successfully Deleted");
       })
       .catch((error) => {
         Helper.alertMessage("error", error);
@@ -90,20 +114,23 @@ const TaskList = () => {
                     <td> {moment(data.time).format("MMMM D, yyyy")}</td>
                     <td> {data.status}</td>
                     <td>
-                      <button
-                        onClick={() => handleEdit(data.id)}
+                      <Link
+                        to={"/update-task/" + data.id}
                         className="btn btn-info btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"
                         style={{ padding: "3px 3px", margin: "2px" }}
                       >
                         <i
                           className="micon dw dw-edit"
                           style={{ padding: "3px 3px", margin: "2px" }}
                         ></i>
-                      </button>
+                      </Link>
 
                       <button
+                        onClick={() => {
+                          if (window.confirm("Delete the item?")) {
+                            return deleteItem(data.id);
+                          }
+                        }}
                         className="btn btn-danger btn-sm"
                         style={{ padding: "3px 3px", margin: "2px" }}
                       >
@@ -117,97 +144,6 @@ const TaskList = () => {
                 ))}
             </tbody>
           </table>
-        </div>
-      </div>
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="false"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <form>
-              <div className="modal-header">
-                <h5 className="modal-title" id="staticBackdropLabel">
-                  Warehouse
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <div>
-                        <label htmlFor="name" className="form-label">
-                          Name *
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          // value={formData.name || ""}
-                          name="name"
-                          id="name"
-                          // onChange={onChangeInput}
-                          aria-describedby="name"
-                        />
-                        <div className="mb-3">
-                          <label htmlFor="post_code" className="form-label">
-                            Post Code *
-                          </label>
-                          <input
-                            type="post_code"
-                            name="post_code"
-                            // value={formData.post_code || ""}
-                            className="form-control"
-                            // onChange={onChangeInput}
-                            id="post_code"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="area" className="form-label">
-                            Area *
-                          </label>
-                          <input
-                            type="area"
-                            name="area"
-                            className="form-control"
-                            // value={formData.area || ""}
-                            // onChange={onChangeInput}
-                            id="area"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       </div>
     </div>
