@@ -13,7 +13,7 @@ function App() {
       <BrowserRouter history={history}>
         <div className="App">
           <PreLoader />
-          <Header />
+          <Header userDetails={user.user} />
           <Sidebar />
           <div className="mobile-menu-overlay" />
           <div class="main-container">

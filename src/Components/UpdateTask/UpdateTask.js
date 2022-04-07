@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
-import { URL, SHOW_TASK, UPDATE_TASK } from "../../Axios/Api";
+import { URL, SHOW_TASK, UPDATE_TASK, DELETE_SUBTASK } from "../../Axios/Api";
 import * as Helper from "../../Layouts/Helper";
 import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
@@ -10,8 +10,10 @@ import TimePicker from "react-time-picker";
 
 const UpdateTask = (props) => {
   const { id } = props.match.params;
+  const history = useHistory();
   const [title, setTitle] = useState("");
   const [time, setTime] = useState(new Date());
+  const [taskData, setTaskData] = useState(null);
   const [subTaskData, setSubTaskData] = useState([]);
   const [status, setStatus] = useState("");
   const [date, setDate] = useState(new Date());
@@ -33,7 +35,7 @@ const UpdateTask = (props) => {
     await axios
       .get(URL + SHOW_TASK + "/" + id)
       .then((response) => {
-        console.log(response.data.task);
+        setTaskData(response.data.task);
         setTitle(response.data.task.title);
         setTime(new Date(response.data.task.time));
         setStatus(response.data.task.status);
@@ -44,6 +46,34 @@ const UpdateTask = (props) => {
         Helper.alertMessage("error", error);
       });
   }, []);
+
+  function SubTaskLists() {
+    axios
+      .get(URL + SHOW_TASK + "/" + id)
+      .then((response) => {
+        setTaskData(response.data.task);
+        setTitle(response.data.task.title);
+        setTime(new Date(response.data.task.time));
+        setStatus(response.data.task.status);
+        setSubTaskData(response.data.task.subtask);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        Helper.alertMessage("error", error);
+      });
+  }
+  function deleteItem(id) {
+    axios
+      .delete(URL + DELETE_SUBTASK + "/" + id)
+      .then((response) => {
+        SubTaskLists();
+
+        Helper.alertMessage("success", "Successfully Deleted");
+      })
+      .catch((error) => {
+        Helper.alertMessage("error", error);
+      });
+  }
   if (loading) {
     return (
       <section className="section loading">
@@ -57,10 +87,12 @@ const UpdateTask = (props) => {
     axios
       .put(URL + UPDATE_TASK + "/" + id, {
         title: title,
-        time: time,
+        time: moment(time).format("yyyy-MM-DD"),
         status: status,
       })
       .then((res) => {
+        history.goBack();
+        // props.history.push("/task-list");
         Helper.alertMessage("success", "Successfully Added");
       })
       .catch(function (res) {
@@ -106,13 +138,67 @@ const UpdateTask = (props) => {
             </button>
             <button
               type="reset"
-              //   onClick={handleReset}
+              onClick={() => history.goBack()}
               className="btn btn-info me-1 mb-1 ml-2"
             >
               Cancel
             </button>
           </div>
         </form>
+
+        <div className="table-responsive">
+          <table id="myTable" className="table table-striped">
+            <thead className="table-dark">
+              <tr>
+                <th>SL.</th>
+                <th>Subtask Title</th>
+                <th>Time</th>
+
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subTaskData &&
+                subTaskData.map((data, index) => (
+                  <tr>
+                    <td> {index + 1}</td>
+                    <td> {data.title}</td>
+
+                    <td> {data.time}</td>
+
+                    <td>
+                      <Link
+                        to={"/update-subtask/" + data.id}
+                        className="btn btn-info btn-sm"
+                        style={{ padding: "3px 3px", margin: "2px" }}
+                      >
+                        <i
+                          className="micon dw dw-edit"
+                          style={{ padding: "3px 3px", margin: "2px" }}
+                        ></i>
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          if (window.confirm("Delete the item?")) {
+                            return deleteItem(data.id);
+                          }
+                        }}
+                        className="btn btn-danger btn-sm"
+                        style={{ padding: "3px 3px", margin: "2px" }}
+                      >
+                        <i
+                          className="micon dw dw-trash"
+                          style={{ padding: "3px 3px", margin: "2px" }}
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+
         {/* {subTaskData &&
           subTaskData.map((subtask, index) => {
             setSubTitle(...subTitle, subtask.title);

@@ -55,9 +55,9 @@ class Login extends Component {
             </div>
             <div className="login-menu">
               <ul>
-                <li>
+                {/* <li>
                   <Link to="/register">Register</Link>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -120,18 +120,18 @@ class Login extends Component {
                             className="custom-control-input"
                             id="customCheck1"
                           />
-                          <label
+                          {/* <label
                             className="custom-control-label"
                             htmlFor="customCheck1"
                           >
                             Remember
-                          </label>
+                          </label> */}
                         </div>
                       </div>
                       <div className="col-6">
-                        <div className="forgot-password">
+                        {/* <div className="forgot-password">
                           <a href="forgot-password.html">Forgot Password</a>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="row">
@@ -148,7 +148,7 @@ class Login extends Component {
                             Sign in
                           </button>
                         </div>
-                        <div
+                        {/* <div
                           className="font-16 weight-600 pt-10 pb-10 text-center"
                           data-color="#707373"
                         >
@@ -161,7 +161,7 @@ class Login extends Component {
                           >
                             Register To Create Account
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </form>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const Header = () => {
+const Header = (props) => {
+  const user = props.userDetails;
   return (
     <div className="header">
       <div className="header-left">
@@ -19,7 +20,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="user-info-dropdown">
+        <div className="user-info-dropdown mt-2">
           <div className="dropdown">
             <a
               className="dropdown-toggle"
@@ -27,18 +28,15 @@ const Header = () => {
               role="button"
               data-toggle="dropdown"
             >
-              <span className="user-icon">
-                <img src="vendors/images/photo1.jpg" alt />
-              </span>
-              <span className="user-name">Kabir</span>
+              <span className="user-name">{user.name}</span>
             </a>
             <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-              <Link className="dropdown-item" to="/profile">
+              {/* <Link className="dropdown-item" to="/profile">
                 <i className="dw dw-user1" /> Profile
               </Link>
               <Link className="dropdown-item" to="/settings">
                 <i className="dw dw-settings2" /> Setting
-              </Link>
+              </Link> */}
 
               <Link className="dropdown-item" to="/logout">
                 <i className="dw dw-logout" /> Log Out

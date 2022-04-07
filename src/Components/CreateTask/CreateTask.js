@@ -31,7 +31,7 @@ const CreateTask = (props) => {
       .post(URL + STORE_TASK, {
         title: title,
         time: moment(time).format("yyyy-MM-DD"),
-        status: "Not Touched",
+        status: "Not Started",
       })
       .then((res) => {
         props.history.push("/create-subtask");

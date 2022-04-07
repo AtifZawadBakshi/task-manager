@@ -2,7 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import * as Helper from "../../Layouts/Helper";
-import { URL, GET_TASK, DELETE_BOOKING } from "../../Axios/Api";
+import { URL, GET_TASK, DELETE_TASK } from "../../Axios/Api";
 import { Link } from "react-router-dom";
 import Loader from "../../Layouts/Loader";
 
@@ -46,20 +46,9 @@ const TaskList = () => {
         Helper.alertMessage("error", error);
       });
   }
-  function handleEdit(id) {
-    axios
-      .get(URL + GET_TASK + "/" + id)
-      .then((response) => {
-        console.log(response.data.task);
-        setModalData(response.data.task);
-      })
-      .catch((error) => {
-        Helper.alertMessage("error", error);
-      });
-  }
   function deleteItem(id) {
     axios
-      .delete(URL + DELETE_BOOKING + "/" + id)
+      .delete(URL + DELETE_TASK + "/" + id)
       .then((response) => {
         TaskLists();
         Helper.alertMessage("success", "Successfully Deleted");

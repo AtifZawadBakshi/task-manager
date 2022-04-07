@@ -8,12 +8,14 @@ export const GET_TASK = "meet/task";
 export const STORE_TASK = "meet/task";
 export const UPDATE_TASK = "meet/task";
 export const SHOW_TASK = "meet/task";
+export const SHOW_SUBTASK = "meet/sub-task";
 export const GET_SUBTASK = "meet/sub-task";
 export const STORE_SUBTASK = "meet/sub-task";
 export const UPDATE_SUBTASK = "meet/sub-task";
 export const STATUS_SUBTASK = "meet/sub-task/status";
 export const DATE_TASK = "meet/task/date";
-export const DELETE_BOOKING = "meet/task";
+export const DELETE_TASK = "meet/task";
+export const DELETE_SUBTASK = "meet/sub-task";
 const LOGOUT = "admin/logout";
 
 const API = async (config) => {

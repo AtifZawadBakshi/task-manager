@@ -2,16 +2,17 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import * as Helper from "../../Layouts/Helper";
-import { Link } from "react-router-dom";
-import Loader from "../../Layouts/Loader";
-import TimePicker from "react-time-picker";
 import { URL, STORE_SUBTASK, GET_TASK } from "../../Axios/Api";
+import Loader from "../../Layouts/Loader";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CreateSubtask = (props) => {
   let [formData, setFormData] = useState({});
-  const [value, onChange] = useState();
+
   const [selectedTask, setSelectedTask] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [time, setTime] = useState(new Date());
   const [title, setTitle] = useState("");
 
   useEffect(async () => {
@@ -38,14 +39,13 @@ const CreateSubtask = (props) => {
       });
   }, []);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     axios
-
       .post(URL + STORE_SUBTASK, {
         title: title,
-        time: value,
+        time: moment(time).format("h:mm A"),
         task_id: selectedTask,
+        status: 0,
       })
       .then((res) => {
         props.history.push("/dashboard");
@@ -57,7 +57,7 @@ const CreateSubtask = (props) => {
   }
   function handleReset() {
     setTitle(null);
-    onChange(null);
+    setTime(new Date());
   }
 
   if (loading) {
@@ -101,22 +101,36 @@ const CreateSubtask = (props) => {
               className="form-control"
               type="text"
               placeholder="Type Title"
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
           <div className="form-group">
             <label>Time</label>
-            <TimePicker
-              onChange={onChange}
-              value={value}
+            <DatePicker
               className="form-control"
+              selected={time}
+              onChange={(date) => setTime(date)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={30}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
             />
           </div>
           <div className="col-12 d-flex justify-content-center mt-4 mb-20">
-            <button type="button" class="btn btn-primary me-1 mb-1 ml-2">
+            <button
+              type="button"
+              className="btn btn-primary me-1 mb-1 ml-2"
+              onClick={handleSubmit}
+            >
               Assign
             </button>
-            <button type="reset" className="btn btn-info me-1 mb-1 ml-2">
+            <button
+              type="reset"
+              onClick={handleReset}
+              className="btn btn-info me-1 mb-1 ml-2"
+            >
               Reset
             </button>
           </div>

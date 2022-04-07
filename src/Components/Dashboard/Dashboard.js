@@ -1,10 +1,65 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import moment from "moment";
+import React, { useState, useEffect } from "react";
+import * as Helper from "../../Layouts/Helper";
+import { URL, DATE_TASK } from "../../Axios/Api";
+import { Link } from "react-router-dom";
+import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Calendar from "./Calendar";
-
 const Dashboard = () => {
   const [schedule, setSchedule] = useState(new Date());
+  const [taskData, setTaskData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(async () => {
+    let auth_check = JSON.parse(localStorage.getItem("user"));
+    const token = auth_check.access_token || null;
+    axios.interceptors.request.use(
+      (config) => {
+        config.headers.authorization = `Bearer ${token}`;
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+    await axios
+
+      .post(URL + DATE_TASK, {
+        date: moment(schedule).format("yyyy-MM-DD"),
+      })
+      .then((res) => {
+        setTaskData(res.data.data);
+        setLoading(false);
+      })
+      .catch(function (res) {
+        Helper.alertMessage("error", res);
+      });
+  }, []);
+  function handleClick(e) {
+    e.preventDefault();
+
+    axios
+      .post(URL + DATE_TASK, {
+        date: moment(schedule).format("yyyy-MM-DD"),
+      })
+      .then((res) => {
+        setTaskData(res.data.data);
+        setLoading(false);
+      })
+      .catch(function (res) {
+        Helper.alertMessage("error", res);
+      });
+  }
+  if (loading) {
+    return (
+      <section className="section loading">
+        <Loader />
+      </section>
+    );
+  }
+
   return (
     <>
       <div className="pd-20 card-box mb-30">
@@ -31,7 +86,7 @@ const Dashboard = () => {
               <button
                 type="submit"
                 className="btn btn-primary waves-effect waves-light me-6"
-                // onClick={(e) => handleSubmit(e)}
+                onClick={(e) => handleClick(e)}
                 style={{ padding: "0px 8px", margin: "1px 2px" }}
               >
                 <i className="fa fa-search" />
@@ -44,195 +99,66 @@ const Dashboard = () => {
         <div className="container pd-0">
           <div className="timeline mb-30">
             <ul>
-              <li>
-                <div className="timeline-date">Task 1</div>
-                <div className="timeline-desc card-box">
-                  <div className="card table-card">
-                    <div
-                      className="card-header "
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div className="display-inline-block">
-                        <h4 className="mb-10 mt-3 h4">Task Title 1</h4>
-                      </div>
-                      <button type="button mt-3" class="btn btn-success">
-                        Completed
-                      </button>
-                    </div>
-                    <div className="card-block">
-                      <div className="profile-timeline-list ml-5">
-                        <ul>
-                          <li>
-                            <div className="date">09:30 am</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 1
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="date">12:30 pm</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 2
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="date">03:30 pm</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 3
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                        </ul>
+              {taskData &&
+                taskData.map((task, index) => (
+                  <li>
+                    <div className="timeline-date">Task {index + 1}</div>
+                    <div className="timeline-desc card-box">
+                      <div className="card table-card">
+                        <div
+                          className="card-header "
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div className="display-inline-block">
+                            <h4 className="mb-10 mt-3 h4">{task.title}</h4>
+                          </div>
+                          <button
+                            type="button mt-3"
+                            className={
+                              task.status === "Done"
+                                ? "btn btn-success"
+                                : task.status === "In Progress"
+                                ? "btn btn-warning"
+                                : "btn btn-secondary"
+                            }
+                          >
+                            {task.status}
+                          </button>
+                        </div>
+                        <div className="card-block">
+                          <div className="profile-timeline-list ml-5">
+                            <ul>
+                              {task.subtask &&
+                                task.subtask.map((sub, index) => (
+                                  <li>
+                                    <div className="date">{sub.time}</div>
+                                    <div className="task-name">
+                                      <i className="ion-ios-clock" />{" "}
+                                      {sub.title}
+                                    </div>
+                                    <div className="task-time mt-3 ">
+                                      {/* <select className="btn btn-sm btn-info"> */}
+                                      <button className="btn btn-sm btn-info">
+                                        {sub.status === 0
+                                          ? "Not Done"
+                                          : sub.status === 1
+                                          ? "Done"
+                                          : "Null"}
+                                      </button>
+                                      {/* </select> */}
+                                    </div>
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-date">Task 2</div>
-                <div className="timeline-desc card-box">
-                  <div className="card table-card">
-                    <div
-                      className="card-header "
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div className="display-inline-block">
-                        <h4 className="mb-10 mt-3 h4">Task Title 2</h4>
-                      </div>
-                      <button type="button mt-3" class="btn btn-secondary">
-                        Not Touched
-                      </button>
-                    </div>
-                    <div className="card-block">
-                      <div className="profile-timeline-list ml-5">
-                        <ul>
-                          <li>
-                            <div className="date">09:30 am</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 1
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="date">11:30 am</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 2
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="date">02:30 pm</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 3
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-date">Task 3</div>
-                <div className="timeline-desc card-box">
-                  <div className="card table-card">
-                    <div
-                      className="card-header "
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div className="display-inline-block">
-                        <h4 className="mb-10 mt-3 h4">Task Title 3</h4>
-                      </div>
-                      <button type="button mt-3" class="btn btn-warning">
-                        In Progress
-                      </button>
-                    </div>
-                    <div className="card-block">
-                      <div className="profile-timeline-list ml-5">
-                        <ul>
-                          <li>
-                            <div className="date">09:30 am</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 1
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="date">09:30 am</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 2
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="date">09:30 am</div>
-                            <div className="task-name">
-                              <i className="ion-ios-clock" /> Sub Task 3
-                            </div>
-                            <div className="task-time mt-3 ">
-                              <select className="btn btn-sm btn-info">
-                                <option>Not Done</option>
-                                <option value="Picked">Done</option>
-                              </select>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
+                  </li>
+                ))}
             </ul>
           </div>
         </div>
