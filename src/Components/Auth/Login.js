@@ -54,8 +54,11 @@ class Login extends Component {
               </Link>
             </div>
             <div className="login-menu">
-              <ul>
-                {/* <li>
+              <ul className="row mr-1">
+                {/* <li className="col-8">
+                  <Link to="/update-password">Change Password</Link>
+                </li> */}
+                {/* <li className="col-3 ">
                   <Link to="/register">Register</Link>
                 </li> */}
               </ul>
@@ -130,7 +133,7 @@ class Login extends Component {
                       </div>
                       <div className="col-6">
                         {/* <div className="forgot-password">
-                          <a href="forgot-password.html">Forgot Password</a>
+                          <Link to="update-password">Update Password</Link>
                         </div> */}
                       </div>
                     </div>

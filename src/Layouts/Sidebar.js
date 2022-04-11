@@ -95,6 +95,21 @@ const Sidebar = () => {
                   <span className="mtext">Task List</span>
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/update-password"
+                  className="dropdown-toggle no-arrow "
+                >
+                  <span className="micon dw dw-lock" />
+                  <span className="mtext">Reset Password</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/register" className="dropdown-toggle no-arrow ">
+                  <span className="micon dw dw-user" />
+                  <span className="mtext">Register</span>
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>
