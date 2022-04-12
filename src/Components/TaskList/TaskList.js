@@ -7,9 +7,9 @@ import { Link } from "react-router-dom";
 import Loader from "../../Layouts/Loader";
 
 const TaskList = () => {
-  const [modalData, setModalData] = useState({});
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
+
   useEffect(async () => {
     let auth_check = JSON.parse(localStorage.getItem("user"));
     const token = auth_check.access_token || null;
@@ -25,7 +25,6 @@ const TaskList = () => {
     await axios
       .get(URL + GET_TASK)
       .then((response) => {
-        console.log(response.data);
         setFormData(response.data);
         setLoading(false);
       })
@@ -38,7 +37,6 @@ const TaskList = () => {
     axios
       .get(URL + GET_TASK)
       .then((response) => {
-        console.log(response.data);
         setFormData(response.data);
         setLoading(false);
       })
@@ -94,7 +92,6 @@ const TaskList = () => {
               </tr>
             </thead>
             <tbody>
-              {console.log(formData)}
               {formData &&
                 formData.map((data, index) => (
                   <tr>

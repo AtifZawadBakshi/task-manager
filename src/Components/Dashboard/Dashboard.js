@@ -3,9 +3,10 @@ import moment from "moment";
 import React, { useState, useEffect } from "react";
 import * as Helper from "../../Layouts/Helper";
 import { URL, DATE_TASK } from "../../Axios/Api";
-import { Link } from "react-router-dom";
+
 import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
+// import "./dashboard.css";
 import "react-datepicker/dist/react-datepicker.css";
 const Dashboard = () => {
   const [schedule, setSchedule] = useState(new Date());
@@ -37,6 +38,7 @@ const Dashboard = () => {
         Helper.alertMessage("error", res);
       });
   }, []);
+
   function handleClick(e) {
     e.preventDefault();
 
@@ -61,6 +63,7 @@ const Dashboard = () => {
   }
 
   return (
+    // <div className="container-fluid img-wrapper bg-danger">
     <>
       <div className="pd-20 card-box mb-30">
         <div className="form-group row mt-3">
@@ -142,9 +145,9 @@ const Dashboard = () => {
                                     <div className="task-time mt-3 ">
                                       {/* <select className="btn btn-sm btn-info"> */}
                                       <button className="btn btn-sm btn-info">
-                                        {sub.status === 0
+                                        {sub.status === "0"
                                           ? "Not Done"
-                                          : sub.status === 1
+                                          : sub.status === "1"
                                           ? "Done"
                                           : "Null"}
                                       </button>
@@ -164,6 +167,7 @@ const Dashboard = () => {
         </div>
       </div>
     </>
+    // </div>
   );
 };
 

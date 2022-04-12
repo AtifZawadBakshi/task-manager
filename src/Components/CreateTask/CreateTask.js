@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const CreateTask = (props) => {
   const [title, setTitle] = useState("");
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState();
   useEffect(() => {
     let auth_check = JSON.parse(localStorage.getItem("user"));
     const token = auth_check.access_token || null;
@@ -35,7 +35,7 @@ const CreateTask = (props) => {
       })
       .then((res) => {
         props.history.push("/create-subtask");
-        Helper.alertMessage("success", "Successfully Added");
+        Helper.alertMessage("success", "Successfully Added Task");
       })
       .catch(function (res) {
         Helper.alertMessage("error", res);

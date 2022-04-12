@@ -12,7 +12,7 @@ const CreateSubtask = (props) => {
 
   const [selectedTask, setSelectedTask] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState();
   const [title, setTitle] = useState("");
 
   useEffect(async () => {
@@ -30,7 +30,6 @@ const CreateSubtask = (props) => {
     await axios
       .get(URL + GET_TASK)
       .then((response) => {
-        console.log(response.data);
         setFormData(response.data);
         setLoading(false);
       })
@@ -45,11 +44,11 @@ const CreateSubtask = (props) => {
         title: title,
         time: moment(time).format("h:mm A"),
         task_id: selectedTask,
-        status: 0,
+        status: "0",
       })
       .then((res) => {
         props.history.push("/dashboard");
-        Helper.alertMessage("success", "Successfully Added");
+        Helper.alertMessage("success", "Successfully Added Subtask");
       })
       .catch(function (res) {
         Helper.alertMessage("error", res);

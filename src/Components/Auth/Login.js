@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import * as Helper from "../../Layouts/Helper";
-import { Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { URL, ADMIN_LOGIN } from "../../Axios/Api";
 import { Link } from "react-router-dom";
 class Login extends Component {
@@ -38,8 +38,7 @@ class Login extends Component {
         }
       })
       .catch(function (error) {
-        Helper.alertMessage("error", "Something went wrong!");
-        console.log(error);
+        Helper.alertMessage("error", error);
       });
   }
 
@@ -50,7 +49,7 @@ class Login extends Component {
           <div className="container-fluid d-flex justify-content-between align-items-center">
             <div className="brand-logo">
               <Link to="/">
-                <img src="vendors/images/icon-light.png" alt />
+                <img src="vendors/images/icon-light.png" alt="icon-light" />
               </Link>
             </div>
             <div className="login-menu">
@@ -69,7 +68,10 @@ class Login extends Component {
           <div className="container">
             <div className="row align-items-center">
               <div className="col-md-6 col-lg-7">
-                <img src="vendors/images/login-page-img.png" alt />
+                <img
+                  src="vendors/images/login-page-img.png"
+                  alt="login-page-img"
+                />
               </div>
               <div className="col-md-6 col-lg-5">
                 <div className="login-box bg-white box-shadow border-radius-10">

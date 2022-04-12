@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { URL, UPDATE_PASSWORD } from "../../Axios/Api";
+import { URL, ADMIN_REGISTER, USER_REGISTER } from "../../Axios/Api";
 import * as Helper from "../../Layouts/Helper";
 import axios from "axios";
 
@@ -9,22 +9,28 @@ const Register = (props) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [API, setAPI] = useState(null);
+
   function handleAdminClick() {
-    console.log("This is Admin");
+    setAPI(ADMIN_REGISTER);
   }
+
   function handleUserClick() {
-    console.log("This is User");
+    setAPI(USER_REGISTER);
   }
+
   function handleSubmit(e) {
     e.preventDefault();
     axios
 
-      .post(URL + UPDATE_PASSWORD, {
+      .post(URL + API, {
+        name: name,
+        phone: phone,
         email: email,
         password: password,
       })
       .then((res) => {
-        props.history.push("/register");
+        window.location.reload(false);
+        // props.history.push("/register");
         if (res.data.status) {
           Helper.alertMessage("success", "Successfully Updated");
         } else {
@@ -60,7 +66,7 @@ const Register = (props) => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-6 col-lg-7">
-              <img src="vendors/images/login-page-img.png" alt />
+              <img src="vendors/images/login-page-img.png" alt="" />
             </div>
             <div className="col-md-6 col-lg-5">
               <div className="login-box bg-white box-shadow border-radius-10">
@@ -81,7 +87,7 @@ const Register = (props) => {
                           <img
                             src="vendors/images/briefcase.svg"
                             className="svg"
-                            alt
+                            alt=""
                           />
                         </div>
                         <span>For</span>
@@ -93,7 +99,7 @@ const Register = (props) => {
                           <img
                             src="vendors/images/person.svg"
                             className="svg"
-                            alt
+                            alt=""
                           />
                         </div>
                         <span>For</span>
@@ -150,7 +156,7 @@ const Register = (props) => {
                     <input
                       type="password"
                       className="form-control form-control-lg"
-                      placeholder="New Password"
+                      placeholder="Password"
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}

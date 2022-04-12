@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { URL, UPDATE_PASSWORD } from "../../Axios/Api";
 import * as Helper from "../../Layouts/Helper";
 import axios from "axios";
@@ -18,7 +18,7 @@ const UserPassword = (props) => {
       .then((res) => {
         setEmail(null);
         setPassword(null);
-        console.log(res);
+
         props.history.push("/dashboard");
         if (res.data.status) {
           Helper.alertMessage("success", "Successfully Updated");
@@ -37,7 +37,10 @@ const UserPassword = (props) => {
           <div className="container">
             <div className="row align-items-center">
               <div className="col-md-6">
-                <img src="vendors/images/forgot-password.png" alt />
+                <img
+                  src="vendors/images/forgot-password.png"
+                  alt="forgot-password"
+                />
               </div>
               <div className="col-md-6">
                 <div className="login-box bg-white box-shadow border-radius-10">

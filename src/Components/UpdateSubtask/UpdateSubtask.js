@@ -30,7 +30,7 @@ const UpdateSubtask = (props) => {
     await axios
       .get(URL + SHOW_SUBTASK + "/" + id)
       .then((response) => {
-        console.log(response.data.subTask);
+        // console.log(response.data.subTask);
         setSubTaskData(response.data.subTask);
         setTitle(response.data.subTask.title);
         // setTime(new Date(response.data.subTask.time));

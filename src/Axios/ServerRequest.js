@@ -110,7 +110,6 @@ export const deleteItem = async (url, id) => {
       }
     })
     .catch((res) => {
-      console.log(res);
       Helper.alertMessage("error", "Something went wrong!");
     });
 };
