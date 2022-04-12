@@ -52,7 +52,7 @@ const UpdateSubtask = (props) => {
         title: title,
         task_id: 50,
         time: moment(time).format("h:mm A"),
-        status: 0,
+        status: "0",
       })
       .then((res) => {
         history.goBack();
