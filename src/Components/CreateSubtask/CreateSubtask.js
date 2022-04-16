@@ -5,16 +5,17 @@ import * as Helper from "../../Layouts/Helper";
 import { URL, STORE_SUBTASK, GET_TASK } from "../../Axios/Api";
 import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 
 const CreateSubtask = (props) => {
   let [formData, setFormData] = useState({});
-
   const [selectedTask, setSelectedTask] = useState(0);
   const [loading, setLoading] = useState(true);
   const [time, setTime] = useState();
   const [title, setTitle] = useState("");
-
+  // const [options, setOptions] = useState([]);
+  let options = [];
   useEffect(async () => {
     let auth_check = JSON.parse(localStorage.getItem("user"));
     const token = auth_check.access_token || null;
@@ -38,6 +39,20 @@ const CreateSubtask = (props) => {
       });
   }, []);
 
+  const pushArray = (title, id) => {
+    console.log(title);
+    console.log(id);
+    options.push({ label: title, value: id });
+    // setOptions([...options, { label: title, value: id }]);
+    // let tempArray = [...options, { label: title, value: id }];
+    console.log(options);
+    // setOptions(tempArray);
+  };
+
+  const userIdHandler = (value) => {
+    console.log(value);
+    setSelectedTask(value.value);
+  };
   function handleSubmit() {
     axios
       .post(URL + STORE_SUBTASK, {
@@ -79,8 +94,15 @@ const CreateSubtask = (props) => {
           <div className="form-group">
             <label>Main Task</label>
 
-            <select
-              className="custom-select2 form-control"
+            {formData.map((data, index) => pushArray(data.title, data.id))}
+
+            <Select
+              options={options}
+              onChange={userIdHandler}
+              placeholder="Select Main Task"
+            />
+            {/* <select
+              className="form-control select2"
               searchable="Search here.."
               value={selectedTask}
               style={{ width: "100%", height: "38" }}
@@ -92,7 +114,7 @@ const CreateSubtask = (props) => {
                   {data.title}
                 </option>
               ))}
-            </select>
+            </select> */}
           </div>
           <div className="form-group">
             <label>Subtask Title</label>

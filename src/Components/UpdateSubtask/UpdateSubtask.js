@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 const UpdateSubtask = (props) => {
   const { id } = props.match.params;
   const history = useHistory();
+  const [selectedTask, setSelectedTask] = useState(0);
   const [subTaskData, setSubTaskData] = useState(null);
   const [title, setTitle] = useState(null);
   const [time, setTime] = useState(new Date());
@@ -33,11 +34,12 @@ const UpdateSubtask = (props) => {
         // console.log(response.data.subTask);
         setSubTaskData(response.data.subTask);
         setTitle(response.data.subTask.title);
+        setSelectedTask(response.data.subTask.task_id);
         // setTime(new Date(response.data.subTask.time));
-        // console.log(new Date(response.data.subTask.time));
+        // console.log(response.data.subTask.time);
         // setTime(response.data.subTask.time);
         // console.log(response.data.subTask.time);
-        // console.log(moment(response.data.subTask.time).format("h:mm A"));
+        // console.log(moment(response.data.subTask.time).format("h:mm aa"));
         setLoading(false);
       })
       .catch(function (error) {
@@ -50,7 +52,7 @@ const UpdateSubtask = (props) => {
     axios
       .put(URL + UPDATE_SUBTASK + "/" + id, {
         title: title,
-        task_id: 50,
+        task_id: selectedTask,
         time: moment(time).format("h:mm A"),
         status: "0",
       })
@@ -79,6 +81,24 @@ const UpdateSubtask = (props) => {
         </div>
       </div>
       <form onSubmit={(e) => handleSubtaskSubmit(e)}>
+        {/* <div className="form-group">
+          <label>Main Task</label>
+
+          <select
+            className="custom-select2 form-control"
+            searchable="Search here.."
+            value={selectedTask}
+            style={{ width: "100%", height: "38" }}
+            onChange={(e) => setSelectedTask(e.target.value)}
+          >
+            <option value="">Select Main Task</option>
+            {formData.map((data, index) => (
+              <option key={index} value={data.id}>
+                {data.title}
+              </option>
+            ))}
+          </select>
+        </div> */}
         <div className="form-group">
           <label>
             Subtask Title<span style={{ color: "red" }}>*</span>
@@ -104,6 +124,7 @@ const UpdateSubtask = (props) => {
             timeIntervals={30}
             timeCaption="Time"
             dateFormat="h:mm aa"
+            placeholder="6:00 AM"
           />
           {/* <TimePicker
             //   value={timeVal}
