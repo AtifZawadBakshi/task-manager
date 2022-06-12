@@ -6,7 +6,7 @@ const PreLoader = () => {
       <div className="pre-loader-box">
         <div className="loader-logo">
           <img
-            src="vendors/images/icon-light.png"
+            src="login/vendors/images/icon-light.png"
             alt
             width="300"
             height="300"
