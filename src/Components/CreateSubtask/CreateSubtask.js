@@ -12,6 +12,7 @@ const CreateSubtask = (props) => {
   let [formData, setFormData] = useState({});
   const [selectedTask, setSelectedTask] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [date, setDate] = useState();
   const [time, setTime] = useState();
   const [title, setTitle] = useState("");
   // const [options, setOptions] = useState([]);
@@ -31,7 +32,7 @@ const CreateSubtask = (props) => {
     await axios
       .get(URL + GET_TASK)
       .then((response) => {
-        setFormData(response.data);
+        setFormData(response.data.data);
         setLoading(false);
       })
       .catch(function (error) {
@@ -53,15 +54,17 @@ const CreateSubtask = (props) => {
     console.log(value);
     setSelectedTask(value.value);
   };
+
   function handleSubmit() {
     axios
       .post(URL + STORE_SUBTASK, {
         title: title,
-        time: moment(time).format("h:mm A"),
+        date: moment(date).format("yyyy-MM-DD"),
+        time: moment(time).format("HH:mm"),
         task_id: selectedTask,
         status: "0",
       })
-      .then((res) => {
+      .then((response) => {
         props.history.push("/dashboard");
         Helper.alertMessage("success", "Successfully Added Subtask");
       })
@@ -93,9 +96,7 @@ const CreateSubtask = (props) => {
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="form-group">
             <label>Main Task</label>
-
             {formData.map((data, index) => pushArray(data.title, data.id))}
-
             <Select
               options={options}
               onChange={userIdHandler}
@@ -125,18 +126,30 @@ const CreateSubtask = (props) => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-
+          <div className="form-group">
+            <label>Date</label>
+            <DatePicker
+              minDate={new Date()}
+              selected={date}
+              onChange={(res) => setDate(res)}
+              dateFormat="yyyy-MM-dd"
+              className="form-control"
+              placeholderText="Select Date"
+            />
+          </div>
           <div className="form-group">
             <label>Time</label>
             <DatePicker
               className="form-control"
               selected={time}
-              onChange={(date) => setTime(date)}
+              onChange={(res) => setTime(res)}
               showTimeSelect
               showTimeSelectOnly
               timeIntervals={30}
               timeCaption="Time"
-              dateFormat="h:mm aa"
+              dateFormat="HH:mm"
+              timeFormat="HH:mm"
+              placeholderText="Select Time"
             />
           </div>
           <div className="col-12 d-flex justify-content-center mt-4 mb-20">

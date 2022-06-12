@@ -7,7 +7,7 @@ import * as Helper from "../../Layouts/Helper";
 import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
 import TimePicker from "react-time-picker";
-
+import Swal from "sweetalert2";
 const UpdateTask = (props) => {
   const { id } = props.match.params;
   const history = useHistory();
@@ -15,11 +15,12 @@ const UpdateTask = (props) => {
   const [time, setTime] = useState(new Date());
   const [taskData, setTaskData] = useState(null);
   const [subTaskData, setSubTaskData] = useState([]);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(null);
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [subTitle, setSubTitle] = useState([]);
   const [timeVal, setTimeVal] = useState([]);
+
   useEffect(async () => {
     let auth_check = JSON.parse(localStorage.getItem("user"));
     const token = auth_check.access_token || null;
@@ -32,19 +33,7 @@ const UpdateTask = (props) => {
         return Promise.reject(error);
       }
     );
-    await axios
-      .get(URL + SHOW_TASK + "/" + id)
-      .then((response) => {
-        setTaskData(response.data.task);
-        setTitle(response.data.task.title);
-        setTime(new Date(response.data.task.time));
-        setStatus(response.data.task.status);
-        setSubTaskData(response.data.task.subtask);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        Helper.alertMessage("error", error);
-      });
+    SubTaskLists();
   }, []);
 
   function SubTaskLists() {
@@ -67,7 +56,6 @@ const UpdateTask = (props) => {
       .delete(URL + DELETE_SUBTASK + "/" + id)
       .then((response) => {
         SubTaskLists();
-
         Helper.alertMessage("success", "Successfully Deleted");
       })
       .catch((error) => {
@@ -87,11 +75,12 @@ const UpdateTask = (props) => {
     axios
       .put(URL + UPDATE_TASK + "/" + id, {
         title: title,
-        time: moment(time).format("yyyy-MM-DD"),
+        // time: moment(time).format("yyyy-MM-DD"),
         status: status,
       })
       .then((res) => {
         history.goBack();
+        SubTaskLists();
         // props.history.push("/task-list");
         Helper.alertMessage("success", "Successfully Added");
       })
@@ -121,6 +110,15 @@ const UpdateTask = (props) => {
             />
           </div>
           <div className="form-group">
+            <label>Task Status</label>
+            <input
+              className="form-control"
+              type="text"
+              placeholder={status}
+              disabled
+            />
+          </div>
+          {/* <div className="form-group">
             <label>
               Date<span style={{ color: "red" }}>*</span>
             </label>
@@ -131,9 +129,9 @@ const UpdateTask = (props) => {
               dateFormat="yyyy-MM-dd"
               className="form-control"
             />
-          </div>
-          <div className="col-12 d-flex justify-content-center mt-4 mb-20 pt-5">
-            <button type="submit" class="btn btn-primary me-1 mb-1 ml-2">
+          </div> */}
+          <div className="col-12 d-flex justify-content-center mt-4 mb-20 pt-2 pb-5">
+            <button type="submit" className="btn btn-primary me-1 mb-1 ml-2">
               Update
             </button>
             <button
@@ -152,20 +150,21 @@ const UpdateTask = (props) => {
               <tr>
                 <th>SL.</th>
                 <th>Subtask Title</th>
+                <th>Date</th>
                 <th>Time</th>
-
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {subTaskData &&
                 subTaskData.map((data, index) => (
-                  <tr>
+                  <tr key={index}>
                     <td> {index + 1}</td>
                     <td> {data.title}</td>
-
+                    <td> {data.date}</td>
                     <td> {data.time}</td>
-
+                    <td>{data.status !== "0" ? "Done" : "Not Done"}</td>
                     <td>
                       <Link
                         to={"/update-subtask/" + data.id}
@@ -180,9 +179,19 @@ const UpdateTask = (props) => {
 
                       <button
                         onClick={() => {
-                          if (window.confirm("Delete the item?")) {
-                            return deleteItem(data.id);
-                          }
+                          Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!",
+                          }).then((result) => {
+                            if (result.value) {
+                              return deleteItem(data.id);
+                            }
+                          });
                         }}
                         className="btn btn-danger btn-sm"
                         style={{ padding: "3px 3px", margin: "2px" }}

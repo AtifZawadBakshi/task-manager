@@ -6,7 +6,7 @@ import { URL, DATE_TASK } from "../../Axios/Api";
 
 import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
-// import "./dashboard.css";
+// import "./dashboard.css"
 import "react-datepicker/dist/react-datepicker.css";
 const Dashboard = () => {
   const [schedule, setSchedule] = useState(new Date());
@@ -31,7 +31,8 @@ const Dashboard = () => {
         date: moment(schedule).format("yyyy-MM-DD"),
       })
       .then((res) => {
-        setTaskData(res.data.data);
+        console.log(res.data.subtask);
+        setTaskData(res.data.subtask);
         setLoading(false);
       })
       .catch(function (res) {
@@ -103,9 +104,10 @@ const Dashboard = () => {
           <div className="timeline mb-30">
             <ul>
               {taskData &&
-                taskData.map((task, index) => (
-                  <li>
-                    <div className="timeline-date">Task {index + 1}</div>
+                taskData.map((subtask, index) => (
+                  <li key={index}>
+                    {console.log(subtask.task[0].title)}
+                    <div className="timeline-date">Subtask {index + 1}</div>
                     <div className="timeline-desc card-box">
                       <div className="card table-card">
                         <div
@@ -116,45 +118,44 @@ const Dashboard = () => {
                           }}
                         >
                           <div className="display-inline-block">
-                            <h4 className="mb-10 mt-3 h4">{task.title}</h4>
+                            <h4 className="mb-10 mt-3 h4">
+                              {subtask.task[0].title}
+                            </h4>
                           </div>
                           <button
                             type="button mt-3"
                             className={
-                              task.status === "Done"
+                              subtask.task[0].status === "Done"
                                 ? "btn btn-success"
-                                : task.status === "In Progress"
+                                : subtask.task[0].status === "In Progress"
                                 ? "btn btn-warning"
                                 : "btn btn-secondary"
                             }
                           >
-                            {task.status}
+                            {subtask.task[0].status}
                           </button>
                         </div>
                         <div className="card-block">
                           <div className="profile-timeline-list ml-5">
                             <ul>
-                              {task.subtask &&
-                                task.subtask.map((sub, index) => (
-                                  <li>
-                                    <div className="date">{sub.time}</div>
-                                    <div className="task-name">
-                                      <i className="ion-ios-clock" />{" "}
-                                      {sub.title}
-                                    </div>
-                                    <div className="task-time mt-3 ">
-                                      {/* <select className="btn btn-sm btn-info"> */}
-                                      <button className="btn btn-sm btn-info">
-                                        {sub.status === "0"
-                                          ? "Not Done"
-                                          : sub.status === "1"
-                                          ? "Done"
-                                          : "Null"}
-                                      </button>
-                                      {/* </select> */}
-                                    </div>
-                                  </li>
-                                ))}
+                              <li>
+                                <div className="date">{subtask.time}</div>
+                                <div className="task-name">
+                                  <i className="ion-ios-clock" />{" "}
+                                  {subtask.title}
+                                </div>
+                                <div className="task-time mt-3 ">
+                                  {/* <select className="btn btn-sm btn-info"> */}
+                                  <button className="btn btn-sm btn-info">
+                                    {subtask.status === "0"
+                                      ? "Not Done"
+                                      : subtask.status === "1"
+                                      ? "Done"
+                                      : "Null"}
+                                  </button>
+                                  {/* </select> */}
+                                </div>
+                              </li>
                             </ul>
                           </div>
                         </div>

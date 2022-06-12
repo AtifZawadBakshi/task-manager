@@ -1,6 +1,6 @@
 import axios from "axios";
 // export const URL = "https://10.100.17.234/FairEx/api/v1/";
-export const URL = "https://trueaviation.aero/FairEx/api/v1/";
+export const URL = "http://trueaviation.aero/FairEx/api/v1/";
 export const ADMIN_LOGIN = "admin/login";
 export const ADMIN_REGISTER = "admin/register";
 export const USER_REGISTER = "user/register";

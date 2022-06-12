@@ -30,7 +30,7 @@ const CreateTask = (props) => {
 
       .post(URL + STORE_TASK, {
         title: title,
-        time: moment(time).format("yyyy-MM-DD"),
+        // time: moment(time).format("yyyy-MM-DD"),
         status: "Not Started",
       })
       .then((res) => {
@@ -65,7 +65,7 @@ const CreateTask = (props) => {
             />
           </div>
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <label>Date</label>
             <DatePicker
               minDate={new Date()}
@@ -74,9 +74,9 @@ const CreateTask = (props) => {
               dateFormat="yyyy-MM-dd"
               className="form-control"
             />
-          </div>
+          </div> */}
           <div className="col-12 d-flex justify-content-center mt-4 mb-20 pt-5">
-            <button type="submit" class="btn btn-primary me-1 mb-1 ml-2">
+            <button type="submit" className="btn btn-primary me-1 mb-1 ml-2">
               Assign
             </button>
             <button

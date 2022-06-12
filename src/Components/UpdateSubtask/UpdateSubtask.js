@@ -6,6 +6,8 @@ import { URL, SHOW_SUBTASK, UPDATE_SUBTASK } from "../../Axios/Api";
 import * as Helper from "../../Layouts/Helper";
 import Loader from "../../Layouts/Loader";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
+import Swal from "sweetalert2";
 
 const UpdateSubtask = (props) => {
   const { id } = props.match.params;
@@ -13,9 +15,16 @@ const UpdateSubtask = (props) => {
   const [selectedTask, setSelectedTask] = useState(0);
   const [subTaskData, setSubTaskData] = useState(null);
   const [title, setTitle] = useState(null);
-  const [time, setTime] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(null);
+  const [timePlaceHolder, setTimeHolder] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [status, setStatus] = useState(null);
+  let statusOption = [
+    { label: "Not Done", value: "0" },
+    { label: "Done", value: "1" },
+  ];
+  // let timePlaceholder;
   useEffect(async () => {
     let auth_check = JSON.parse(localStorage.getItem("user"));
     const token = auth_check.access_token || null;
@@ -31,12 +40,14 @@ const UpdateSubtask = (props) => {
     await axios
       .get(URL + SHOW_SUBTASK + "/" + id)
       .then((response) => {
-        // console.log(response.data.subTask);
+        console.log(response.data.subTask);
+        setSelectedTask(response.data.subTask.task_id);
         setSubTaskData(response.data.subTask);
         setTitle(response.data.subTask.title);
-        setSelectedTask(response.data.subTask.task_id);
-        // setTime(new Date(response.data.subTask.time));
-        // console.log(response.data.subTask.time);
+        setStatus(response.data.subTask.status);
+        setTimeHolder(response.data.subTask.time);
+        setDate(new Date(response.data.subTask.date));
+        // timePlaceholder = response.data.subTask.time;
         // setTime(response.data.subTask.time);
         // console.log(response.data.subTask.time);
         // console.log(moment(response.data.subTask.time).format("h:mm aa"));
@@ -47,22 +58,49 @@ const UpdateSubtask = (props) => {
       });
   }, []);
 
+  const statusHandler = (value) => {
+    setStatus(value.value);
+  };
+
   function handleSubtaskSubmit(e) {
     e.preventDefault();
-    axios
-      .put(URL + UPDATE_SUBTASK + "/" + id, {
-        title: title,
-        task_id: selectedTask,
-        time: moment(time).format("h:mm A"),
-        status: "0",
-      })
-      .then((res) => {
-        history.goBack();
-        Helper.alertMessage("success", "Successfully Updated");
-      })
-      .catch(function (res) {
-        Helper.alertMessage("error", res);
-      });
+    console.log("title: ", title);
+    console.log("task_id: ", selectedTask);
+    console.log("date: ", date);
+    console.log("time: ", time);
+    if (time !== null) {
+      axios
+        .put(URL + UPDATE_SUBTASK + "/" + id, {
+          title: title,
+          task_id: selectedTask,
+          date: moment(date).format("yyyy-MM-DD"),
+          time: moment(time).format("HH:mm"),
+          status: status,
+        })
+        .then((res) => {
+          history.goBack();
+          Helper.alertMessage("success", "Successfully Updated");
+        })
+        .catch(function (res) {
+          Helper.alertMessage("error", res);
+        });
+    } else {
+      axios
+        .put(URL + UPDATE_SUBTASK + "/" + id, {
+          title: title,
+          task_id: selectedTask,
+          date: moment(date).format("yyyy-MM-DD"),
+          time: timePlaceHolder,
+          status: status,
+        })
+        .then((res) => {
+          history.goBack();
+          Helper.alertMessage("success", "Successfully Updated");
+        })
+        .catch(function (res) {
+          Helper.alertMessage("error", res);
+        });
+    }
   }
 
   if (loading) {
@@ -111,6 +149,20 @@ const UpdateSubtask = (props) => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
+
+        <div className="form-group">
+          <label>
+            Date<span style={{ color: "red" }}>*</span>
+          </label>
+          <DatePicker
+            minDate={new Date()}
+            selected={date}
+            onChange={(res) => setDate(res)}
+            dateFormat="yyyy-MM-dd"
+            className="form-control"
+          />
+        </div>
+
         <div className="form-group">
           <label>
             Time<span style={{ color: "red" }}>*</span>
@@ -118,13 +170,14 @@ const UpdateSubtask = (props) => {
           <DatePicker
             className="form-control"
             selected={time}
-            onChange={(date) => setTime(date)}
+            onChange={(res) => setTime(res)}
             showTimeSelect
             showTimeSelectOnly
             timeIntervals={30}
             timeCaption="Time"
-            dateFormat="h:mm aa"
-            placeholder="6:00 AM"
+            dateFormat="HH:mm"
+            timeFormat="HH:mm"
+            placeholderText={timePlaceHolder}
           />
           {/* <TimePicker
             //   value={timeVal}
@@ -132,8 +185,20 @@ const UpdateSubtask = (props) => {
             className="form-control"
           /> */}
         </div>
-        <div className="col-12 d-flex justify-content-center mt-4 mb-20 pt-5">
-          <button type="submit" class="btn btn-primary me-1 mb-1 ml-2">
+
+        <div className="form-group">
+          <label>
+            Status<span style={{ color: "red" }}>*</span>
+          </label>
+          <Select
+            options={statusOption}
+            onChange={statusHandler}
+            defaultValue={status === "0" ? statusOption[0] : statusOption[1]}
+          />
+        </div>
+
+        <div className="col-12 d-flex justify-content-center mt-4 mb-20 pt-2 pb-5">
+          <button type="submit" className="btn btn-primary me-1 mb-1 ml-2">
             Update
           </button>
           <button

@@ -5,6 +5,7 @@ import * as Helper from "../../Layouts/Helper";
 import { URL, GET_TASK, DELETE_TASK } from "../../Axios/Api";
 import { Link } from "react-router-dom";
 import Loader from "../../Layouts/Loader";
+import Swal from "sweetalert2";
 
 const TaskList = () => {
   const [formData, setFormData] = useState({});
@@ -22,22 +23,15 @@ const TaskList = () => {
         return Promise.reject(error);
       }
     );
-    await axios
-      .get(URL + GET_TASK)
-      .then((response) => {
-        setFormData(response.data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        Helper.alertMessage("error", error);
-      });
+    TaskLists();
   }, []);
 
   function TaskLists() {
     axios
       .get(URL + GET_TASK)
       .then((response) => {
-        setFormData(response.data);
+        console.log(response.data);
+        setFormData(response.data.data);
         setLoading(false);
       })
       .catch(function (error) {
@@ -86,18 +80,18 @@ const TaskList = () => {
               <tr>
                 <th>SL.</th>
                 <th>Task Title</th>
-                <th>Date</th>
+                {/* <th>Date</th> */}
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {formData &&
                 formData.map((data, index) => (
-                  <tr>
+                  <tr key={index}>
                     <td> {index + 1}</td>
                     <td> {data.title}</td>
-                    <td> {moment(data.time).format("MMMM D, yyyy")}</td>
                     <td> {data.status}</td>
                     <td>
                       <Link
@@ -113,9 +107,19 @@ const TaskList = () => {
 
                       <button
                         onClick={() => {
-                          if (window.confirm("Delete the item?")) {
-                            return deleteItem(data.id);
-                          }
+                          Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!",
+                          }).then((result) => {
+                            if (result.value) {
+                              return deleteItem(data.id);
+                            }
+                          });
                         }}
                         className="btn btn-danger btn-sm"
                         style={{ padding: "3px 3px", margin: "2px" }}

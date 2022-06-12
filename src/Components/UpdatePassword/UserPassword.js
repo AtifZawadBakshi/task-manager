@@ -10,7 +10,6 @@ const UserPassword = (props) => {
   function handleSubmit(e) {
     e.preventDefault();
     axios
-
       .post(URL + UPDATE_PASSWORD, {
         email: email,
         password: password,
