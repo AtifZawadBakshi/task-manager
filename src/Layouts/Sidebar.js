@@ -54,11 +54,15 @@ const Sidebar = () => {
         <div className="brand-logo">
           <Link to="/dashboard">
             <img
-              src="vendors/images/icon-light.png"
+              src="login/vendors/images/icon-light.png"
               alt
               className="dark-logo"
             />
-            <img src="vendors/images/icon.png" alt className="light-logo" />
+            <img
+              src="login/vendors/images/icon.png"
+              alt
+              className="light-logo"
+            />
           </Link>
           <div className="close-sidebar" data-toggle="left-sidebar-close">
             <i className="ion-close-round" />

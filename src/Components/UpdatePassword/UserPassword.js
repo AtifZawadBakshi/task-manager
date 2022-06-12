@@ -37,7 +37,7 @@ const UserPassword = (props) => {
             <div className="row align-items-center">
               <div className="col-md-6">
                 <img
-                  src="vendors/images/forgot-password.png"
+                  src="login/vendors/images/forgot-password.png"
                   alt="forgot-password"
                 />
               </div>

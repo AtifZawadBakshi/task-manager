@@ -66,7 +66,7 @@ const Register = (props) => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-6 col-lg-7">
-              <img src="vendors/images/login-page-img.png" alt="" />
+              <img src="login/vendors/images/login-page-img.png" alt="" />
             </div>
             <div className="col-md-6 col-lg-5">
               <div className="login-box bg-white box-shadow border-radius-10">
@@ -85,7 +85,7 @@ const Register = (props) => {
                         <input type="radio" name="options" id="admin" />
                         <div className="icon">
                           <img
-                            src="vendors/images/briefcase.svg"
+                            src="login/vendors/images/briefcase.svg"
                             className="svg"
                             alt=""
                           />
@@ -97,7 +97,7 @@ const Register = (props) => {
                         <input type="radio" name="options" id="user" />
                         <div className="icon">
                           <img
-                            src="vendors/images/person.svg"
+                            src="login/vendors/images/person.svg"
                             className="svg"
                             alt=""
                           />
